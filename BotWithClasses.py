@@ -1,7 +1,60 @@
 import os
-phone_book = {
+from collections import UserDict
+
+
+class Field():
+    def __init__(self, value):
+        self.value = value
+
+class Name(Field):
+    pass
+
+class Phone(Field):
+    pass
+
+class Record():
+
+    phone_numbers = []
+
+    def __init__(self, name, phone_number=""):
+        self.name = Name(name)
+        self.phone_numbers = [Phone(phone_number)] if phone_number else [] 
     
-}
+    def add_phone_number(self, number):
+        self.phone_numbers.append(Phone(number))
+    
+    def delete_phone_number(self, number):
+       for i in self.phone_numbers:
+            if i.value == number:
+                self.phone_numbers.remove(i)
+    
+    def change_phone_number(self, old_number, new_number):
+        self.delete_phone_number(old_number)
+        self.add_phone_number(new_number)
+
+    def show_phone_number(self):
+        list_phone_number = []
+        for i in self.phone_numbers:
+            list_phone_number.append(i.value)
+        return list_phone_number
+
+class AddressBook(UserDict):
+
+    def search(self, value):
+        return value in self.data.values()
+    
+    def add_record(self, record):
+        self.data[record.name.value] = record
+    
+    def all_show_phone_number(self):
+        all_cont = ""
+        for key, value in self.data.items():
+            all_cont += f"{key}: {value.show_phone_number()}\n"
+        return all_cont[:-1]
+
+
+phone_book = AddressBook()
+
 messages = {
     -1: '- Done',
     0: '- Unknown command',
